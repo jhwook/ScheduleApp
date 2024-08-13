@@ -18,21 +18,17 @@ public class UserRepository {
 
     public User save(User user) {
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        String sql = "INSERT INTO user (username) VALUES (?)";
+        String sql = "INSERT INTO user (username, email) VALUES (?, ?)";
 
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement = con.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getEmail());
 
             return preparedStatement;
-        }, keyHolder);
-
-        Long id = keyHolder.getKey().longValue();
-        user.setId(id);
+        });
 
         return user;
     }

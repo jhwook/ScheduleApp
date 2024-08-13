@@ -17,6 +17,8 @@ public class Schedule {
 
     private String username;
 
+    private String createdAt;
+
     private String updatedAt;
 
     public Schedule (ScheduleRequestDto scheduleRequestDto) {
@@ -30,6 +32,8 @@ public class Schedule {
         this.content = schedule.getContent();
         this.username = schedule.getUsername();
         this.password = schedule.getPassword();
+        this.createdAt = schedule.getCreatedAt();
+        this.updatedAt = schedule.getUpdatedAt();
     }
 
 }

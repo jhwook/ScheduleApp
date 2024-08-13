@@ -11,6 +11,9 @@ import lombok.Setter;
 public class User {
     private Long id;
     private String username;
+    private String email;
+    private String createdAt;
+    private String updatedAt;
 
     public User(UserRequestDto userRequestDto) {
         this.username = userRequestDto.getUsername();

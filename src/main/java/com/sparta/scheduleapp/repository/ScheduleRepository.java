@@ -49,6 +49,7 @@ public class ScheduleRepository {
                 schedule.setContent(resultSet.getString("content"));
                 schedule.setUsername(resultSet.getString("username"));
                 schedule.setPassword(resultSet.getString("password"));
+                schedule.setCreatedAt(resultSet.getString("created_at"));
                 schedule.setUpdatedAt(resultSet.getString("updated_at"));
                 return schedule;
             } else {
@@ -66,8 +67,9 @@ public class ScheduleRepository {
             Long id = rs.getLong("id");
             String username1 = rs.getString("username");
             String content = rs.getString("content");
+            String craetedAt = rs.getString("created_at");
             String updatedAt1 = rs.getString("updated_at");
-            return new ScheduleResponseDto(id, username1, content, updatedAt1);
+            return new ScheduleResponseDto(id, username1, content, craetedAt, updatedAt1);
         });
 
     }
@@ -81,9 +83,10 @@ public class ScheduleRepository {
             Long id = rs.getLong("id");
             String username1 = rs.getString("username");
             String content = rs.getString("content");
+            String craetedAt = rs.getString("created_at");
             String updatedAt = rs.getString("updated_at");
 
-            return new ScheduleResponseDto(id, username1, content, updatedAt);
+            return new ScheduleResponseDto(id, username1, content, craetedAt, updatedAt);
         });
     }
 
@@ -95,8 +98,9 @@ public class ScheduleRepository {
             Long id = rs.getLong("id");
             String username = rs.getString("username");
             String content = rs.getString("content");
+            String createdAt = rs.getString("created_at");
             String updatedAt1 = rs.getString("updated_at");
-            return new ScheduleResponseDto(id, username, content, updatedAt1);
+            return new ScheduleResponseDto(id, username, content, createdAt, updatedAt1);
         });
     }
 
@@ -131,6 +135,7 @@ public class ScheduleRepository {
                     updatedSchedule.getId(),
                     updatedSchedule.getUsername(),
                     updatedSchedule.getContent(),
+                    updatedSchedule.getCreatedAt(),
                     updatedSchedule.getUpdatedAt() // updatedAt을 필요에 따라 추가하세요
             );
         } else {
