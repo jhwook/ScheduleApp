@@ -3,9 +3,10 @@ package com.sparta.scheduleapp.service;
 import com.sparta.scheduleapp.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.entity.Schedule;
+import com.sparta.scheduleapp.exception.PasswordMismatchException;
+import com.sparta.scheduleapp.exception.ResourceNotFoundException;
 import com.sparta.scheduleapp.repository.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +39,15 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getSchdules(String username, String updatedAt) {
+    public List<ScheduleResponseDto> getSchdules(String username, String updatedAt, Long offset, Long limit) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         List<ScheduleResponseDto> scheduleList = new ArrayList<>();
         if(username != null && updatedAt != null) {
-            scheduleList = scheduleRepository.getAllByUsernameAndUpdatedAt(username, updatedAt);
+            scheduleList = scheduleRepository.getAllByUsernameAndUpdatedAt(username, updatedAt, offset, limit);
         } else if(username != null) {
-            scheduleList = scheduleRepository.getAllByUsername(username);
+            scheduleList = scheduleRepository.getAllByUsername(username, offset, limit);
         } else if(updatedAt != null) {
-            scheduleList = scheduleRepository.getAllByUpdatedAt(updatedAt);
+            scheduleList = scheduleRepository.getAllByUpdatedAt(updatedAt, offset, limit);
         }
 
         return scheduleList;
@@ -63,10 +64,10 @@ public class ScheduleService {
                 ScheduleResponseDto updatedSchedule = scheduleRepository.updateSchedule(id, scheduleRequestDto);
                 return updatedSchedule;
             } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+                throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
             }
         } else {
-            throw new IllegalArgumentException("해당 스케줄은는 존재하지 않습니다.");
+            throw new ResourceNotFoundException("해당 스케줄은 존재하지 않습니다.");
         }
 
 
@@ -83,10 +84,10 @@ public class ScheduleService {
                 scheduleRepository.deleteSchedule(id);
                 return "성공적으로 삭제 되었습니다.";
             } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+                throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
             }
         } else {
-            throw new IllegalArgumentException("해당 스케줄은는 존재하지 않습니다.");
+            throw new ResourceNotFoundException("해당 스케줄은 존재하지 않습니다.");
         }
     }
 }

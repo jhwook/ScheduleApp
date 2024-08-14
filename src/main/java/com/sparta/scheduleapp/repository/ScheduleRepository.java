@@ -4,14 +4,9 @@ import com.sparta.scheduleapp.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ScheduleRepository {
@@ -59,10 +54,10 @@ public class ScheduleRepository {
     }
 
 
-    public List<ScheduleResponseDto> getAllByUsernameAndUpdatedAt(String username, String updatedAt) {
-        String sql = "SELECT * from schedule where username=? and updated_at=? order by updated_at DESC";
+    public List<ScheduleResponseDto> getAllByUsernameAndUpdatedAt(String username, String updatedAt, Long offset, Long limit) {
+        String sql = "SELECT * from schedule where username=? and updated_at=? order by updated_at DESC LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(sql, new Object[]{username, updatedAt}, (rs, rowNum) -> {
+        return jdbcTemplate.query(sql, new Object[]{username, updatedAt, limit, offset}, (rs, rowNum) -> {
             // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
             Long id = rs.getLong("id");
             String username1 = rs.getString("username");
@@ -74,11 +69,11 @@ public class ScheduleRepository {
 
     }
 
-    public List<ScheduleResponseDto> getAllByUsername(String username) {
-        String sql = "SELECT * from schedule where username=? order by updated_at DESC";
+    public List<ScheduleResponseDto> getAllByUsername(String username, Long offset, Long limit) {
+        String sql = "SELECT * from schedule where username=? order by updated_at DESC LIMIT ? OFFSET ?";
 
 
-        return jdbcTemplate.query(sql, new Object[]{username}, (rs, rowNum) -> {
+        return jdbcTemplate.query(sql, new Object[]{username, limit, offset}, (rs, rowNum) -> {
             // 결과 집합에서 데이터를 추출하고 ScheduleResponseDto 객체로 매핑
             Long id = rs.getLong("id");
             String username1 = rs.getString("username");
@@ -90,10 +85,10 @@ public class ScheduleRepository {
         });
     }
 
-    public List<ScheduleResponseDto> getAllByUpdatedAt(String updatedAt) {
-        String sql = "SELECT * from schedule where updated_at=? order by updated_at DESC";
+    public List<ScheduleResponseDto> getAllByUpdatedAt(String updatedAt, Long offset, Long limit) {
+        String sql = "SELECT * from schedule where updated_at=? order by updated_at DESC LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(sql,new Object[]{updatedAt}, (rs, rowNum) -> {
+        return jdbcTemplate.query(sql,new Object[]{updatedAt, limit, offset}, (rs, rowNum) -> {
             // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
             Long id = rs.getLong("id");
             String username = rs.getString("username");

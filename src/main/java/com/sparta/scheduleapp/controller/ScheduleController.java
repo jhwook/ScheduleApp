@@ -32,10 +32,12 @@ public class ScheduleController {
     }
 
     // username 및 updatedAt 으로 스케줄 쿼리
-    @GetMapping("/schedules/param")
-    public List<ScheduleResponseDto> getSchedules(@RequestParam(required = false) String username, @RequestParam(required = false) String updatedAt) {
+    @GetMapping("/schedules/{offset}/{limit}/param")
+    public List<ScheduleResponseDto> getSchedules(@RequestParam(required = false) String username,
+                                                  @RequestParam(required = false) String updatedAt,
+                                                  @PathVariable Long offset, @PathVariable Long limit) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.getSchdules(username, updatedAt);
+        return scheduleService.getSchdules(username, updatedAt, offset, limit);
     }
 
     // 선택 일정 수정
