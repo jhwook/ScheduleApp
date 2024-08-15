@@ -1,4 +1,6 @@
+# ERD
 
+![ERD](./erd.jpeg)
 # API Documentation
 
 
