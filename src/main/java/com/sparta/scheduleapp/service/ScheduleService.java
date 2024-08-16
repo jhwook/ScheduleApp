@@ -12,15 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleService {
-    private final JdbcTemplate jdbcTemplate;
+    private final ScheduleRepository scheduleRepository;
 
     public ScheduleService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        this.scheduleRepository = new ScheduleRepository(jdbcTemplate);
     }
     public ScheduleResponseDto createSchedule (ScheduleRequestDto scheduleRequestDto) {
         Schedule schedule = new Schedule(scheduleRequestDto);
 
-        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         scheduleRepository.save(schedule);
 
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
@@ -29,8 +28,6 @@ public class ScheduleService {
     }
 
     public ScheduleResponseDto findOneSchedule(Long id) {
-        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-
         Schedule findSchedule = scheduleRepository.findOne(id);
         Schedule schedule = new Schedule(findSchedule);
 
@@ -40,7 +37,6 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDto> getSchdules(String username, String updatedAt, Long offset, Long limit) {
-        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         List<ScheduleResponseDto> scheduleList = new ArrayList<>();
         if(username != null && updatedAt != null) {
             scheduleList = scheduleRepository.getAllByUsernameAndUpdatedAt(username, updatedAt, offset, limit);
@@ -54,8 +50,6 @@ public class ScheduleService {
     }
 
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
-        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-
         Schedule exist = scheduleRepository.findOne(id);
         if(exist != null) {
             boolean checkPassword = scheduleRepository.checkPassword(id, scheduleRequestDto.getPassword());
@@ -74,7 +68,6 @@ public class ScheduleService {
     }
 
     public String deleteSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
-        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         Schedule exist = scheduleRepository.findOne(id);
 
         if(exist != null) {

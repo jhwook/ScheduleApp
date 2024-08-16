@@ -7,15 +7,14 @@ import com.sparta.scheduleapp.repository.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class UserService {
-    private final JdbcTemplate jdbcTemplate;
+    private final UserRepository userRepository;
 
     public UserService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        this.userRepository = new UserRepository(jdbcTemplate);
     }
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         User user = new User(userRequestDto);
 
-        UserRepository userRepository = new UserRepository(jdbcTemplate);
         User saveUser = userRepository.save(user);
 
         UserResponseDto userResponseDto = new UserResponseDto(user);
